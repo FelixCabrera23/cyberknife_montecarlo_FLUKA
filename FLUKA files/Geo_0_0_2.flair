@@ -1,0 +1,504 @@
+# flair project file
+Version: 300
+Mode: fluka
+Title: Beam_V1_5mm
+md5: dafbd6767da8bad8e0e08c34b048976a
+Input:
+TITLE
+	Geometry_V_0_0_2
+*Set the defaults for precision simulations
+DEFAULTS PRECISIO
+*Define the beam characteristics
+BEAM ELECTRON -0.006,, 0.001 -0.025 -0.025 1.0
+	scale=3
+*Define the beam position
+BEAMPOS ,,, -81
+point marker1 0 0 0
+point marker2 -6.0 0 0
+point marker3 6.0 0 0
+point marker4 0 0 -80.0
+point marker5 3.0 0 0
+point marker6 -3.0 0 0
+GEOBEGIN COMBNAME
+*Black body
+SPH blkbody 0.0 0.0 0.0 100000.0
+*Void sphere
+SPH void 0 0 0 360.5551275464
+RPP phantom -10.0 10 -10.0 10 0 35.0
+ZCC head1 0 0 8.3
+ZCC head2 0 0 7.3
+ZCC head3 0 0 3.8
+ZCC head4 0 0 3.24
+ZCC head5 0 0 2.9
+ZCC head6 0 0 0.9
+TRC head7 0 0 -73.4 0 0 3.1 6.9 3.8
+TRC head8 0 0 -76.6 0 0 6.84 0.28 0.56
+RCC head9 0 0 -79.58 0 0 2.98 0.28
+TRC head10 0 0 -63.2 0 0 2.35 0.8 0.95
+TRC head11 0 0 -48.75 0 0 8.65 1.2 1.55
+XYP head12 -40.1
+XYP head13 -42.0
+XYP head14 -48.75
+XYP head15 -49.6
+XYP head16 -60.0
+XYP head17 -60.85
+XYP head18 -63.2
+XYP head19 -67.0
+XYP head20 -69.0
+XYP head21 -69.76
+XYP head22 -73.4
+XYP head23 -79.58
+XYP head24 -80.1
+XYP head25 -80.3
+XYP head26 -85.3
+XYP head27 -79.95
+RCC head28 0 0 -79.95 0 0 0.37 0.05
+XYP head29 -70.3
+END
+*Black hole
+REGION BLKBODY 5
+	+blkbody -void
+*Void around
+REGION VOID 5
+	+head6 +head25 -head26
+*Target
+REGION PHANTOM 5
+	+phantom
+REGION TARGET
+	+head6 +head24 -head25
+REGION COOLING
+	+head6 +head23 -head27 -head28
+	| +head6 +head27 -head24 -head28
+REGION COLLIM_0
+	+head1 +head23 -head6 -head26
+	| +head1 +head22 -head7 -head8 -head9 -head23
+	| +head7 -head8
+	| +head3 +head21 -head8 -head29
+REGION SHIELD
+	+head2 +head17 -head10 -head18
+	| +head3 +head13 -head4 -head15
+	| +head3 +head15 -head5 -head16
+	| +head2 +head16 -head5 -head17
+REGION COLLIM
+	+head4 +head13 -head11 -head14
+	| +head3 +head12 -head11 -head13
+REGION FILTER
+	+head4 +head19 -head20
+REGION AIR
+	+head28
+	| +head9
+	| +head8
+	| +head4 +head20 -head21
+REGION AIR1
+	+head4 +head18 -head19
+	| head10
+	| +head5 +head15 -head17
+	| +head4 +head14 -head15
+	| +head11
+REGION AIROUT
+	+void -phantom -head1
+	| +void +head1 +head26
+	| +void +head1 -phantom -head12
+	| +head1 +head29 -head7 -head22
+	| +head1 +head18 -head3 -head29
+	| +head3 +head18 -head4 -head21
+	| +head1 +head16 -head2 -head18
+	| +head1 +head12 -head3 -head16
+END
+GEOEND
+*..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA , BLCKHOLE BLKBODY
+ASSIGNMA , VACUUM VOID
+ASSIGNMA , WATER PHANTOM
+ASSIGNMA , TUNGSTEN TARGET
+ASSIGNMA , COPPER COOLING
+ASSIGNMA , LEAD COLLIM_0
+ASSIGNMA , LEAD SHIELD
+ASSIGNMA , TUNGSTEN COLLIM
+ASSIGNMA , ALUMINUM FILTER
+ASSIGNMA , AIR AIR
+ASSIGNMA , AIR AIR1
+ASSIGNMA , AIR AIROUT
+USRBIN usrb-dose 10 DOSE -21 5 5 31 0 0 1 151 151 120
+USRBIN beamview 10 PHOTON -22 15 15 0 -15 -15 -90 100 100 200
+USRBIN electview 10 ELECTRON -23 15 15 0 -15 -15 -90 100 100 200
+USRBIN energview 10 ENERGY -24 15 15 0 -15 -15 -90 100 100 200
+USRBIN doseview 10 DOSE -25 10 10 35 -10 -10 0 100 100 100
+USRTRACK airin -1 PHOTON -26 AIR 1 100,, 0.0001
+USRTRACK airout -1 PHOTON -27 AIR1 1 100,, 0.0001
+*Set the random number seed
+RANDOMIZ , 1.0 9
+*Set the number of primary histories to be simulated in the run
+START , 10000000
+STOP
+EndInput
+
+Notes:
+	|Simulation of the head of Cyberknife S7 version 0.0.2
+	|
+	|Geometry Status:
+	|
+	|	The geometry is based on the data provided by the maker in the tecnical brosure of the previews generation.
+	|	
+	|	
+	|	** It is fundamental to model the electron filter wich is not in its final form.
+Page: Plot
+plotengine: Gnuplot
+
+# Run information
+Run: <default>
+	Status:   3
+	open:     1
+End
+Run: 10M_R1
+	Status:   3
+	open:     1
+End
+Run: 10M_R1_01
+	Rnd:      10
+	Status:   3
+	StartRun: 1719838746.2313085
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_02
+	Rnd:      11
+	Status:   3
+	StartRun: 1719838746.2462678
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_03
+	Rnd:      12
+	Status:   3
+	StartRun: 1719838746.261176
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_04
+	Rnd:      13
+	Status:   3
+	StartRun: 1719838746.2774293
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_05
+	Rnd:      14
+	Status:   3
+	StartRun: 1719838746.2934473
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_06
+	Rnd:      15
+	Status:   3
+	StartRun: 1719838746.310635
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_07
+	Rnd:      16
+	Status:   3
+	StartRun: 1719838746.3297994
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_08
+	Rnd:      17
+	Status:   3
+	StartRun: 1719838746.3528373
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_09
+	Rnd:      18
+	Status:   3
+	StartRun: 1719838746.376696
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_10
+	Rnd:      19
+	Status:   3
+	StartRun: 1719838746.4134114
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_11
+	Rnd:      20
+	Status:   3
+	StartRun: 1719838746.454617
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_12
+	Rnd:      21
+	Status:   3
+	StartRun: 1719838746.4961085
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_13
+	Rnd:      22
+	Status:   3
+	StartRun: 1719838746.5372636
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_14
+	Rnd:      23
+	Status:   3
+	StartRun: 1719838746.5809612
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_15
+	Rnd:      24
+	Status:   3
+	StartRun: 1719838746.6277065
+	Parent:   10M_R1
+	open:     1
+End
+Run: 10M_R1_16
+	Rnd:      25
+	Status:   3
+	StartRun: 1719838746.668906
+	Parent:   10M_R1
+	open:     1
+End
+Geometry: Geometry
+	Lock: 1
+	Layer: Borders
+		Image.alpha: 96
+		Image.file: ../../CK2_GEO/CK_geo_img.png
+		Image.marker: 4
+		Image.marker.0: 82.57894736842105 351.36842105263156 0.0 0.0 0.0
+		Image.marker.1: 82.48809523809524 320.48511904761904 -6.0 0.0 0.0
+		Image.marker.2: 82.47619047619048 383.3809523809524 6.0 0.0 0.0
+		Image.marker.3: 928.375 351.5 0.0 0.0 -80.0
+		Image.prompt: 1
+		Show.color: None
+	End
+	Layer: Media
+		Image: 1
+		Image._visible: 1
+		Image.file: ../../CK2_GEO/CK_geo_img.png
+		Image.marker: 4
+		Image.marker.0: 82.6923076923077 351.38461538461536 0.0 0.0 0.0
+		Image.marker.1: 82.46153846153847 383.46153846153845 3.0 0.0 0.0
+		Image.marker.2: 82.46153846153847 320.3076923076923 -3.0 0.0 0.0
+		Image.marker.3: 928.3809523809524 351.4761904761905 0.0 0.0 -80.0
+	End
+	Layer: 3D
+		3D: 1
+		3D._visible: 1
+		3D.edgedetect: 1
+		Options.viewport: 0
+		Show: 0
+		Show.lattice: 1
+		Show.voxel: 1
+	End
+	Layer: Lattice
+		Show.lattice: 2
+		Show.voxel: 2
+	End
+End
+
+# Plots information
+Plot: Red
+	Type: Geometry
+	basisu: 0 0 -1
+	basisv: -1 0 0
+	coord: Z-X
+	extends: 23.256803936137285 17.442602952102963
+	group: Geometry
+	layer: Media
+	origin: -2.90678 0 -58.403
+End
+Plot: Green
+	Type: Geometry
+	basisu: 0.836516 0.0173377 0.547668
+	basisv: 0.224144 0.901221 -0.370891
+	extends: 33.48979766803841 25.117348251028808
+	group: Geometry
+	layer: 3D
+	origin: -15.4456 10.4959 -41.9457
+End
+Plot: Blue
+	Type: Geometry
+	basisv: 0 0 -1
+	coord: X-Z
+	extends: 57.87037037037037 43.40277777777778
+	group: Geometry
+	layer: Media
+	origin: -12.4696 10.4959 -32.0397
+End
+Plot: Magenta
+	Type: Geometry
+	basisv: 0 0 -1
+	coord: X-Z
+	extends: 49.61809899454462 37.21357424590846
+	group: Geometry
+	layer: Media
+	origin: -34 0 -63
+End
+Plot: Geo_0_0_1_plot
+	Type: Geometry
+	basisu: 0 0 1
+	basisv: 1 0 0
+	coord: Z-X
+	extends: 30 30
+	grid: 0
+	open: 1
+	origin: 0 0 -65
+	title: Plot Geometry
+End
+Plot: Coll_60mm_depth_15mm
+	Type: USRBIN
+	bxmax: 5.099338
+	bxmin: 0.
+	bzmax: 2
+	bzmin: 1.
+	cblog: 1
+	datafile: 10M_R1_21.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 1.5753076619376282E-008
+	max: 1.31015354E-09
+	min: 7.93324174E-12
+	open: 1
+	proj: X
+	title: 15 mm
+End
+Plot: Coll_60mm_depth_100mm
+	Type: USRBIN
+	bxmax: 5.099338
+	bxmin: 0.
+	bzmax: 10.5
+	bzmin: 9.5
+	cblog: 1
+	datafile: 10M_R1_21.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 1.2178164060983584E-008
+	max: 9.58060298E-10
+	min: 3.17553830E-11
+	open: 1
+	proj: X
+	title: 100 mm
+End
+Plot: Coll_60mm_depth_300mm
+	Type: USRBIN
+	bxmax: 5.099338
+	bxmin: 0.
+	bzmax: 30.5
+	bzmin: 29.5
+	cblog: 1
+	datafile: 10M_R1_21.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 4.8334691290227824E-009
+	max: 3.56978475E-10
+	min: 1.58484285E-11
+	open: 1
+	proj: X
+	title: 300 mm
+End
+Plot: Coll_60mm_PDD
+	Type: USRBIN
+	bxmax: 0.5298013
+	bxmin: 0.
+	bzmax: 31
+	bzmin: 1.
+	cblog: 1
+	datafile: 10M_R1_21.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 5.3321663665356868E-008
+	max: 1.27583899E-09
+	min: 2.58162158E-10
+	open: 1
+	title: PDD
+End
+Plot: Beam_view
+	Type: USRBIN
+	bzmax: -40.5
+	bzmin: -90.
+	cblog: 1
+	datafile: 10M_R1_22.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 3.0056167769394513
+	max: 5.14122210E-02
+	min: 2.60368438E-07
+	open: 1
+	proj: X
+	title: USRBIN Geo 0 0 1 22
+End
+Plot: Electron_view
+	Type: USRBIN
+	bzmax: -40.05
+	bzmin: -90.
+	cblog: 1
+	datafile: 10M_R1_24.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 5.9318883739437715E-003
+	max: 5.70244214E-04
+	min: 8.53505888E-15
+	open: 1
+	proj: Y
+	title: USRBIN Geo 0 0 1 23
+End
+Plot: Energy_view
+	Type: USRBIN
+	bzmax: -40.05
+	bzmin: -90.
+	cblog: 1
+	datafile: 10M_R1_24.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 5.9318883739437715E-003
+	max: 5.70244214E-04
+	min: 8.53505888E-15
+	open: 1
+	proj: Y
+	title: USRBIN Geo 0 0 1 24
+End
+Plot: Heat-map-phantom
+	Type: USRBIN
+	cblog: 1
+	datafile: 10M_R1_25.bnn
+	grid: 0
+	hist: 2D Projection
+	int: 1.4202506513140201E-006
+	max: 6.59966137E-10
+	min: 2.21315002E-12
+	open: 1
+	proj: Y
+	title: USRBIN Geo 0 0 1 25
+End
+Plot: spectra-before
+	Type: USR-1D
+	file.0: 10M_R1_26_tab.lis
+	grid: 0
+	name.0: #airin
+	ndetectors: 1
+	open: 1
+	title: Plot USR-1D
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End
+Plot: spectra-after
+	Type: USR-1D
+	file.0: 10M_R1_27_tab.lis
+	grid: 0
+	name.0: #airout
+	ndetectors: 1
+	open: 1
+	title: Plot USR-1D
+	xlog: 1
+	y.0: 0
+	ylog: 1
+End

@@ -256,7 +256,7 @@ def LRD_Analize (data_matrix = None, norm = True):
     
             
 ######### Test area #########    
-G_Analize_data_file()
-Ploting_gamma_results()
-LRD_Analize()
+# G_Analize_data_file()
+# Ploting_gamma_results()
+# LRD_Analize()
 

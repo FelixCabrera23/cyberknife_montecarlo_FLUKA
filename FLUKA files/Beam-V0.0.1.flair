@@ -1,0 +1,183 @@
+# flair project file
+Version: 300
+Mode: fluka
+Title: Beam_V1_5mm
+md5: 7177ff02481fee32ce376d2a44117c52
+Input:
+TITLE
+	Beam_V1_5mm
+*Set the defaults for precision simulations
+DEFAULTS PRECISIO
+*Define the beam characteristics
+BEAM PHOTON -0.006,, -0.1 0.25 0 -1.0
+	scale=2
+*Define the beam position
+BEAMPOS ,,, -80
+GEOBEGIN COMBNAME
+*Black body
+SPH blkbody 0.0 0.0 0.0 100000.0
+*Void sphere
+SPH void 0.0 0.0 0.0 10000.0
+RPP target -10.0 10 -10.0 10 0 35.0
+	@select=8
+END
+*Black hole
+REGION BLKBODY 5
+	+blkbody -void
+*Void around
+REGION VOID 5
+	+void -target
+*Target
+REGION TARGET 5
+	+void +target
+END
+GEOEND
+*..+....1....+....2....+....3....+....4....+....5....+....6....+....7..
+ASSIGNMA , BLCKHOLE BLKBODY
+ASSIGNMA , VACUUM VOID
+ASSIGNMA , WATER TARGET
+USRBIN usrb-dose 10 DOSE -99 3 3 31 0 0 1 151 151 60
+*Set the random number seed
+RANDOMIZ , 1.0 9
+*Set the number of primary histories to be simulated in the run
+START
+STOP
+EndInput
+
+Notes:
+	|Beam profile generation and scoring V0.0.1
+Page: Input
+plotengine: Gnuplot
+
+# Run information
+Run: <default>
+	Status:   3
+	open:     1
+End
+Run: _01
+	Rnd:      1
+	Status:   3
+	StartRun: 1718871594.722344
+	Parent:   <default>
+	open:     1
+End
+Run: _02
+	Rnd:      2
+	Status:   3
+	StartRun: 1718871594.734793
+	Parent:   <default>
+	open:     1
+End
+Run: _03
+	Rnd:      3
+	Status:   3
+	StartRun: 1718871594.7468174
+	Parent:   <default>
+	open:     1
+End
+Run: _04
+	Rnd:      4
+	Status:   3
+	StartRun: 1718871594.7651272
+	Parent:   <default>
+	open:     1
+End
+
+# Plots information
+Plot: Red
+	Type: Geometry
+	basisu: 0 0 1
+	basisv: 1 0 0
+	coord: Z-X
+	extends: 69.44444444444437 40.488215488215445
+	group: Geometry
+	layer: Media
+	origin: -12.7729 0 -18.7591
+End
+Plot: Green
+	Type: Geometry
+	basisu: 0.836516 0.0173377 0.547668
+	basisv: 0.224144 0.901221 -0.370891
+	extends: 100.0 58.3030303030303
+	group: Geometry
+	layer: 3D
+End
+Plot: Blue
+	Type: Geometry
+	basisu: 0 0 1
+	coord: Z-Y
+	extends: 100.0 58.18181818181818
+	group: Geometry
+	layer: Media
+	origin: 0 -11.6364 0
+End
+Plot: Magenta
+	Type: Geometry
+	coord: X-Y
+	extends: 100.0 58.18181818181818
+	group: Geometry
+	layer: Media
+	origin: 0 0 3
+End
+Plot: Coll_5mm_depth_15mm
+	Type: USRBIN
+	bxmax: 3
+	bxmin: 0.
+	bzmax: 2
+	bzmin: 1.5
+	cblog: 1
+	datafile: Beam-V0.0.1_99.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 1.1556911232629094E-005
+	max: 2.34667950E-05
+	min: 3.80920989E-10
+	open: 1
+	proj: X
+	title: USRBIN Beam-V0.0.1 40
+End
+Plot: Coll_5mm_depth_100mm
+	Type: USRBIN
+	bxmax: 3
+	bxmin: 0.
+	bzmax: 10.5
+	bzmin: 10.
+	cblog: 1
+	datafile: Beam-V0.0.1_99.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 1.0898731338153463E-005
+	max: 1.89103739E-05
+	min: 1.18765020E-09
+	open: 1
+	proj: X
+	title: USRBIN Beam-V0.0.1 40
+End
+Plot: Coll_5mm_depth_300mm
+	Type: USRBIN
+	bxmax: 3
+	bxmin: 0.
+	bzmax: 30.5
+	bzmin: 30.
+	cblog: 1
+	datafile: Beam-V0.0.1_99.bnn
+	grid: 0
+	hist: 1D Projection
+	int: 6.5598699113995813E-006
+	max: 1.10045530E-05
+	min: 3.54465719E-08
+	open: 1
+	proj: X
+	title: USRBIN Beam-V0.0.1 40
+End
+Plot: Beam-V0.0_plot
+	Type: USR-1D
+	file.0: Beam-V0.0.1_40_plot.dat
+	grid: 0
+	name.0: #D Projection
+	ndetectors: 1
+	open: 1
+	title: Plot USR-1D
+	with.0: errorlines
+	y.0: 0
+End
