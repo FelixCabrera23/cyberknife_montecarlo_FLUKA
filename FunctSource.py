@@ -71,6 +71,10 @@ def read_data_file (file_path):
     """
     This func taces the file path of the data from the FLUKA simulation and 
     returns it into a matrix form
+    
+    ignores commented lines that beggin with '#'
+    
+    works with FLUKA 
     """ 
     data_temp = []
     with open(file_path, 'r') as file:
@@ -78,39 +82,43 @@ def read_data_file (file_path):
             data_temp.append(line.strip())
     
     Dat_mat = []
-    data_temp.pop(0)
-    
+
     for line in data_temp:
         list_temp = line.split()
-        float_temp = [float(string) for string in list_temp]
-        Dat_mat.append(float_temp)
+        if list_temp[0] != '#':        
+            float_temp = [float(string) for string in list_temp]
+            Dat_mat.append(float_temp)
         
     return(Dat_mat)
 
-def Data_simulated (Data_matrix,norm=True):
+def Data_simulated (Data_matrix,norm=True, scale =10, norm_val = 1):
     """
     This function takes the data matrix from FLUKA 
     and returns list of the radious, dose, and error data
+    
+    the 'scale' changes the scale of the data in the x coordinate
+    the 'norme' normalizes the measurment result to 'norm_val'
 
     """
-    R1_tmp,R2_tmp,dose_tmp,error_tmp = [],[],[],[]
+  
+    x1_tmp,x2_tmp,meas_tmp,error_tmp = [],[],[],[]
 
     for line in Data_matrix:
-        R1_tmp.append(line[0]*10)
-        R2_tmp.append(line[1]*10)
-        dose_tmp.append(line[2])
+        x1_tmp.append(line[0]*scale)
+        x2_tmp.append(line[1]*scale)
+        meas_tmp.append(line[2])
         error_tmp.append(line[3])
         
-    if norm: dose_tmp = normalize(dose_tmp)
+    if norm: meas_tmp = normalize(meas_tmp, norm_Val=norm_val)
         
-    return(R1_tmp,R2_tmp,dose_tmp,error_tmp)
+    return(x1_tmp,x2_tmp,meas_tmp,error_tmp)
 
 def normalize (list_temp,norm_Val = 1):
     """
     Esta funcion normaliza una lista a 1
     """
     norm_list = []
-    max_list = max(list_temp)*norm_Val
+    max_list = max(list_temp)/norm_Val
     for i in list_temp: 
         norm_list.append(i/max_list)
         
@@ -220,6 +228,8 @@ def Ploting_gamma_results (data_matrix = None, norm = True):
     plt.plot(R2,Dose2, label = 'MonteCarlo')        
     plt.plot(R1,Dose1, label = 'OCR')
     plt.plot(R2, Gamma_plot, label = 'Gamma')
+    plt.xlabel(r"Radious [mm]")
+    plt.ylabel(r"normalized dose")
     plt.legend()
     plt.show()
     
@@ -251,12 +261,34 @@ def LRD_Analize (data_matrix = None, norm = True):
     plt.plot(R2,Dose2, label = 'MonteCarlo')    
     plt.plot(R2,mean_dose, label = 'OCR')
     plt.plot(R2,LRD,label = 'LRD')
+    plt.xlabel(r"Radious [mm]")
+    plt.ylabel(r"normalized dose")
     plt.legend()
     plt.show()
     
-            
-######### Test area #########    
-# G_Analize_data_file()
-# Ploting_gamma_results()
-# LRD_Analize()
+def Energy_spectra_plot (file_path = 'Sample_data/Energy_flux_before.lis', x_log = False, y_log = False ,norm = True):
 
+    data_flux = read_data_file(file_path)
+    E1,E2,Flx,Flx_err = Data_simulated(data_flux, norm=norm,scale=1000)
+    
+    if x_log:
+        plt.xscale('log')
+        
+    if y_log:
+        plt.yscale('log')
+        
+    plt.plot(E1,Flx)
+    plt.xlabel(r"MeV")
+    plt.ylabel(r"Photon fluence")
+    plt.show()
+    
+    
+    
+    
+    
+            
+# ######### Test area #########    
+G_Analize_data_file()
+Ploting_gamma_results()
+LRD_Analize()
+Energy_spectra_plot()
