@@ -15,6 +15,8 @@ or the results should be not trusted.
 
 
 """
+
+#import pandas as pd
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -286,7 +288,7 @@ def Energy_spectra_plot (file_path = 'Sample_data/Energy_flux_before.lis', x_log
     
             
 # ######### Test area #########    
-# G_Analize_data_file()
-# Ploting_gamma_results()
-# LRD_Analize()
-# Energy_spectra_plot()
+G_Analize_data_file()
+Ploting_gamma_results()
+LRD_Analize()
+Energy_spectra_plot()
