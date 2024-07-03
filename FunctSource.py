@@ -265,7 +265,19 @@ def LRD_Analize (data_matrix = None, norm = True):
     plt.show()
     
 def Energy_spectra_plot (file_path = 'Sample_data/Energy_flux_before.lis', x_log = False, y_log = False ,norm = True):
+    """
+    This func plots the energy spectrum provided the data from a FLUKA '.lis' file
+    with adecuate format
 
+    Parameters
+    ----------
+    file_path : flie path to the flux data
+        DESCRIPTION. The default is 'Sample_data/Energy_flux_before.lis'.
+    x_log : boolean sets logarithmic scale on x axis
+    y_log : boolean sets logarithmic scale on y axis
+    norm : boolean sets the
+
+    """
     data_flux = read_data_file(file_path)
     E1,E2,Flx,Flx_err = Data_simulated(data_flux, norm=norm,scale=1000)
     
@@ -279,6 +291,21 @@ def Energy_spectra_plot (file_path = 'Sample_data/Energy_flux_before.lis', x_log
     plt.xlabel(r"MeV")
     plt.ylabel(r"Photon fluence")
     plt.show()
+    
+def PDD_plot (file_path = 'Sample_data/Coll_60mm_PDD.dat',norm=True):
+    
+    
+    pdd_data = read_data_file(file_path)
+    
+    Z1, Z2, Dose, Dose_err = Data_simulated(pdd_data,norm=norm,scale=10)
+    
+    plt.plot(Z1,Dose)
+    plt.xlabel(r'Distance [mm]')
+    plt.ylabel(r'Normalized Dose')
+    plt.show()
+    
+    
+    
     
     
     
