@@ -177,7 +177,7 @@ def G_Analize_data_file (file = "dane.dat", coll = 5, depth = 100):
     must be included as imput
     coll = collimator diameter in mm
     depth = depth of the measurment
-    
+    Data_simulated 
     WARNING! failure to include the correct details or data file can give not
     real results
     """
@@ -269,7 +269,7 @@ def Energy_spectra_plot (file_path = 'Sample_data/Energy_flux_before.lis', x_log
     This func plots the energy spectrum provided the data from a FLUKA '.lis' file
     with adecuate format
 
-    Parameters
+    ParametersData_simulated 
     ----------
     file_path : flie path to the flux data
         DESCRIPTION. The default is 'Sample_data/Energy_flux_before.lis'.
