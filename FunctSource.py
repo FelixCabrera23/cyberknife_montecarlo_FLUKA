@@ -313,7 +313,7 @@ def PDD_plot (file_path = 'Sample_data/Coll_60mm_PDD.dat',norm=True):
     
             
 # ######### Test area #########    
-# G_Analize_data_file()
-# Ploting_gamma_results()
-# LRD_Analize()
-# Energy_spectra_plot()
+G_Analize_data_file()
+Ploting_gamma_results()
+LRD_Analize()
+Energy_spectra_plot()
